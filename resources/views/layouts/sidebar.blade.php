@@ -17,9 +17,9 @@
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Unit</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="">Unit 1</a></li>
-                    <li><a class="nav-link" href="">Unit 2</a></li>
-                    <li><a class="nav-link" href="">Unit 3</a></li>
+                    @foreach ($unitMenu as $menu)
+                    <li><a class="nav-link" href="">{{ $menu->name }}</a></li>
+                    @endforeach
                 </ul>
             </li>
             <li>
