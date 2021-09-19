@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class UnitController extends Controller
 {
@@ -13,7 +16,8 @@ class UnitController extends Controller
      */
     public function index()
     {
-        //
+        $this->units = Unit::get();
+        return view('unit.index', $this->data);
     }
 
     /**
@@ -34,7 +38,29 @@ class UnitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $is_valid = Validator::make($request->all(), [
+            'name' => 'required'
+        ]);
+
+        if ($is_valid->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $is_valid->errors()
+            ]);
+        }
+
+        $unit = new Unit();
+        $unit->name = $request->name;
+        $unit->slug = Str::slug($request->name, '-');
+        $unit->ip_address = $request->ip();
+        $unit->created_by = auth()->user()->name;
+        $unit->updated_by = auth()->user()->name;
+        $unit->save();
+
+        return response()->json([
+            'success' =>true,
+            'name' => $unit->name
+        ]);
     }
 
     /**
@@ -79,6 +105,9 @@ class UnitController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Unit::destroy($id);
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }

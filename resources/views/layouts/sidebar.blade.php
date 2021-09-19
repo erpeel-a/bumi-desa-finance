@@ -8,12 +8,12 @@
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
-            <li class="active">
-                <a class="nav-link" href=""><i class="fas fa-fire">
+            <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('dashboard') }}"><i class="fas fa-fire">
                     </i> <span>Dashboard</span>
                 </a>
             </li>
-            <li class="menu-header">Master</li>
+            <li class="menu-header">Master Content</li>
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Unit</span></a>
                 <ul class="dropdown-menu">
@@ -25,6 +25,12 @@
             <li>
                 <a class="nav-link" href="">
                     <i class="far fa-square"></i> <span>Laporan</span>
+                </a>
+            </li>
+            <li class="menu-header">Master Data</li>
+            <li class="{{ request()->is('units*') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('units.index') }}"><i class="fas fa-fire">
+                    </i> <span>Daftar Unit</span>
                 </a>
             </li>
         </ul>
