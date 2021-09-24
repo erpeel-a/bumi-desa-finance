@@ -3,6 +3,15 @@ namespace App\Helpers;
 
 class Helper{
 
+  protected static $response = [
+    'meta' => [
+      'code' => 200,
+      'status' => 'success',
+      'message' => null
+    ],
+    'data' => null
+  ];
+
   public static function number_to_price($value)
   {
       if (!$value) {
@@ -23,10 +32,9 @@ class Helper{
       return $value;
   }
 
-
   public static function indonesian_date($date){
-    $month = array (
-      1 =>   'Januari',
+    $month = [
+         1 =>   'Januari',
       'Februari',
       'Maret',
       'April',
@@ -38,7 +46,7 @@ class Helper{
       'Oktober',
       'November',
       'Desember'
-    );
+    ];
     $split = explode('-', $date);
     // variabel split 0 = tanggal
     // variabel split 1 = bulan
@@ -97,15 +105,6 @@ class Helper{
       }
       return $result;
   }
-  
-  protected static $response = [
-    'meta' => [
-      'code' => 200,
-      'status' => 'success',
-      'message' => null
-    ],
-    'data' => null
-  ];
 
   public static function success($data = null, $message = null)
   {
