@@ -1,6 +1,6 @@
 <?php 
 namespace App\Helpers;
-
+use DB;
 class Helper{
 
   protected static $response = [
