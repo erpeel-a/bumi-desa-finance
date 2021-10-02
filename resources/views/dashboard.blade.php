@@ -1,33 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="section-header">
-    <h1>Default Layout</h1>
-    <div class="section-header-breadcrumb">
-        <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-        <div class="breadcrumb-item"><a href="#">Layout</a></div>
-        <div class="breadcrumb-item">Default Layout</div>
-    </div>
-</div>
-
-<div class="section-body">
-    <h2 class="section-title">This is Example Page</h2>
-    <p class="section-lead">This page is just an example for you to create your own page.</p>
-    <div class="card">
-        <div class="card-header">
-            <h4>Example Card</h4>
-        </div>
+<div class="container-fluid">
+    <h1 class="mt-4">Static Navigation</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+        <li class="breadcrumb-item active">Static Navigation</li>
+    </ol>
+    <div class="card mb-4">
         <div class="card-body">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </div>
-        <div class="card-footer bg-whitesmoke">
-            This is card footer
+            <p class="mb-0">
+                This page is an example of using static navigation. By removing the
+                <code>.sb-nav-fixed</code>
+                class from the
+                <code>body</code>
+                , the top navigation and side navigation will become static on scroll. Scroll down this page to see an example.
+            </p>
         </div>
     </div>
+    <div style="height: 100vh"></div>
+    <div class="card mb-4"><div class="card-body">When scrolling, the navigation stays at the top of the page. This is the end of the static navigation demo.</div></div>
 </div>
 @endsection

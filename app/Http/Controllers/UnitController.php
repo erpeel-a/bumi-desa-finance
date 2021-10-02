@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\UnitDataTable;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,10 +15,9 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(UnitDataTable $dataTable)
     {
-        $this->units = Unit::get();
-        return view('unit.index', $this->data);
+        return $dataTable->render('unit.index', $this->data);
     }
 
     /**

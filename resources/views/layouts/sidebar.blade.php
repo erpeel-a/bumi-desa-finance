@@ -1,47 +1,39 @@
-<div class="main-sidebar sidebar-style-2">
-    <aside id="sidebar-wrapper">
-        <div class="sidebar-brand">
-            <a href="">Stisla</a>
-        </div>
-        <div class="sidebar-brand sidebar-brand-sm">
-            <a href="">St</a>
-        </div>
-        <ul class="sidebar-menu">
-            <li class="menu-header">Dashboard</li>
-            <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('dashboard') }}"><i class="fas fa-fire">
-                    </i> <span>Dashboard</span>
+<div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                <div class="sb-sidenav-menu-heading">Dashboard</div>
+                <a class="nav-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Dashboard
                 </a>
-            </li>
-            <li class="menu-header">Master Content</li>
-            <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Unit</span></a>
-                <ul class="dropdown-menu">
-                    @foreach ($unitMenu as $menu)
-                    <li><a class="nav-link" href="">{{ $menu->name }}</a></li>
-                    @endforeach
-                </ul>
-            </li>
-            <li>
-                <a class="nav-link" href="">
-                    <i class="far fa-square"></i> <span>Laporan</span>
+                <div class="sb-sidenav-menu-heading">Master Content</div>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    Unit
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
-            </li>
-            <li class="menu-header">Master Data</li>
-            <li class="{{ request()->is('units*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('units.index') }}"><i class="fas fa-fire">
-                    </i> <span>Daftar Unit</span>
+                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        @foreach ($unitMenu as $menu)
+                        <a class="nav-link">{{ $menu->name }}</a>
+                        @endforeach
+                    </nav>
+                </div>
+                <a class="nav-link">
+                    <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
+                    Laporan
                 </a>
-            </li>
-        </ul>
-
-        <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-danger btn-lg btn-block btn-icon-split">
-                    <i class="fas fa-rocket"></i> Logout
-                </button>
-            </form>
+                <div class="sb-sidenav-menu-heading">Master Data</div>
+                <a class="nav-link{{ request()->is('units*') ? ' active' : '' }}" href="{{ route('units.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                    Daftar Unit
+                </a>
+            </div>
         </div>
-    </aside>
+        <div class="sb-sidenav-footer">
+            <div class="small">Logged in as:</div>
+            {{ auth()->user()->name }}
+        </div>
+    </nav>
 </div>
