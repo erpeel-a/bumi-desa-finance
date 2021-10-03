@@ -118,9 +118,7 @@
                     })
                     unitsTable.ajax.reload();
                 } else {
-                    $('#modalCreateUnit').find('.modal-body').prepend(
-                        '<div class="alert alert-danger"><strong>Whoops!</strong> ' + res.errors.name +
-                        '.</div>');
+                    toastr["error"](res.errors.name, "Kesalahan Input Data")
                 }
             }
         });
@@ -128,13 +126,13 @@
 
     function destroyUnit(params) {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Apakah anda yakin?',
+            text: "Untuk menghapus data unit ini ?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Delete'
         }).then((result) => {
             if (result.isConfirmed) {
                 console.log("/units/" + params)
