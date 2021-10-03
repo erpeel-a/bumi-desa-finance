@@ -1,23 +1,35 @@
 @extends('layouts.app')
 
 @push('header-script')
-<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
-    crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 @endpush
 
 @section('content')
 <div class="container-fluid">
-    <h1 class="mt-4">Tables</h1>
+    <h1 class="mt-4">Unit</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-        <li class="breadcrumb-item active">Tables</li>
+        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Unit</li>
     </ol>
     <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalCreateUnit">
         Tambah
     </button>
     <div class="card mb-4">
         <div class="card-body">
-            {!! $dataTable->table() !!}
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered" id="units-table">
+                    <thead>
+                        <tr>
+                            <th width="7%">No</th>
+                            <th>Unit</th>
+                            <th>Dibuat oleh</th>
+                            <th width="7%" class="text-center">Opsi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -33,8 +45,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="formCreateUnit">
                     <div class="form-group">
+                        @csrf
                         <label>Nama Unit</label>
                         <input type="text" class="form-control" name="name" id="name" autofocus>
                     </div>
@@ -50,30 +63,46 @@
 @endsection
 
 @push('footer-script')
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
-<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-<script src="/vendor/datatables/buttons.server-side.js"></script>
-{!! $dataTable->scripts() !!}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable({
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var unitsTable = $('#units-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: {
-                url: "{{ route('units.index') }}",
-                type: 'GET',
-            },
+            ajax: "{{ route('units.index') }}",
             columns: [
-                { data: 'name', name: 'name' },
-                { data: 'created_by', name: 'created_by' },
-                // {
-                //     data: "action",
-                //     render: function(row) {
-                //         return '<div class="dropdown"><button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Edit</a><button id="delete-unit" class="dropdown-item" onclick="destroyUnit()">Delete</button></div></div>';
-                //     }
-                // },
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'created_by', name: 'created_by'},
+                {
+                    data: 'action', 
+                    name: 'action', 
+                    orderable: false, 
+                    searchable: false
+                },
             ]
+        });
+    });
+    $("#foo").submit(function(event){
+        $.ajax({
+            url: "{{ route('units.store') }}",
+            dataType: 'json',
+            type: 'post',
+            data: $(this).serialize(),
+            success: function( data ){
+                $('#response pre').html( data );
+                window.LaravelDataTables["#units-table"].ajax.reload();
+            },
+            error: function( data ){
+                console.log( errorThrown );
+            }
         });
     });
 </script>
