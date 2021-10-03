@@ -9,7 +9,7 @@
                 </a>
                 <div class="sb-sidenav-menu-heading">Master Content</div>
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-layer-group"></i></div>
                     Unit
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
@@ -21,12 +21,12 @@
                     </nav>
                 </div>
                 <a class="nav-link">
-                    <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-file-download"></i></div>
                     Laporan
                 </a>
                 <div class="sb-sidenav-menu-heading">Master Data</div>
                 <a class="nav-link{{ request()->is('units*') ? ' active' : '' }}" href="{{ route('units.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                    <div class="sb-nav-link-icon"><i class="fas fa-list-alt"></i></div>
                     Daftar Unit
                 </a>
             </div>

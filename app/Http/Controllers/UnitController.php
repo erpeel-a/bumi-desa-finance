@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\UnitDataTable;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
@@ -22,8 +23,8 @@ class UnitController extends Controller
             $data = Unit::latest()->get();
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $actionBtn = '<div class="dropdown"><button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Edit</a><button id="delete-unit" class="dropdown-item" onclick="destroyUnit()">Delete</button></div></div>';
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<div class="dropdown"><button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Edit</a><button id="delete-unit" class="dropdown-item" onclick="destroyUnit(' . $row->id . ')">Delete</button></div></div>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -70,7 +71,7 @@ class UnitController extends Controller
         $unit->save();
 
         return response()->json([
-            'success' =>true,
+            'success' => true,
             'name' => $unit->name
         ]);
     }

@@ -91,14 +91,6 @@
             ]
         });
     });
-    $("#formCreateUnit").submit(function(event){
-        Swal.fire(
-            'Good job!',
-            'You clicked the button!',
-            'success'
-        )
-        event.preventDefault();
-    });
 
     function storeUnit() {
         $.ajax({
@@ -114,7 +106,7 @@
                     console.log(res);
                     $('#formCreateUnit').trigger("reset");
                     $('#modalCreateUnit').modal('hide');
-                    Swal.fire('Unit berhasil disimpan!', null, 'success')
+                    Swal.fire('Unit berhasil disimpan!', null, 'success');
                     window.LaravelDataTables["#units-table"].ajax.reload();
                 } else {
                     console.log('failed');
@@ -122,6 +114,36 @@
                 }
             }
         });
+    }
+
+    function destroyUnit(params) {
+        console.log(params)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                        console.log("/units/" + params)
+                $.ajax({
+                    type: "DELETE",
+                    url: "/units/" + params,
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            Swal.fire('Terhapus!', 'Unit berhasil dihapus.', 'success');
+                            unitsTable.ajax.reload();
+                        }
+                    }
+                });
+            }
+        })
     }
 </script>
 @endpush
