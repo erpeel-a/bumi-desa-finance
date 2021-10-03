@@ -7,7 +7,7 @@
         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
         <li class="breadcrumb-item active">Daftar Unit</li>
     </ol>
-    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalCreateUnit">
+    <button type="button" class="btn btn-primary mb-3" id="btn_open_modal">
         Tambah
     </button>
     <div class="card mb-4">
@@ -17,8 +17,7 @@
                     <thead>
                         <tr>
                             <th width="7%">No</th>
-                            <th>Unit</th>
-                            <th>Dibuat oleh</th>
+                            <th>Nama Unit</th>
                             <th width="7%" class="text-center">Opsi</th>
                         </tr>
                     </thead>
@@ -68,6 +67,10 @@
             }
         });
 
+        $('#btn_open_modal').on('click', function(){
+            $('#modalCreateUnit').modal('show')
+        })
+
     });
 
     var unitsTable = $('#units-table').DataTable({
@@ -81,10 +84,6 @@
             {
                 data: 'name',
                 name: 'name'
-            },
-            {
-                data: 'created_by',
-                name: 'created_by'
             },
             {
                 data: 'action',
