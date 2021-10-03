@@ -2,14 +2,15 @@
 
 @push('header-script')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.min.css">
 @endpush
 
 @section('content')
 <div class="container-fluid">
-    <h1 class="mt-4">Unit</h1>
+    <h1 class="mt-4">Daftar Unit</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Unit</li>
+        <li class="breadcrumb-item active">Daftar Unit</li>
     </ol>
     <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalCreateUnit">
         Tambah
@@ -46,8 +47,8 @@
             </div>
             <div class="modal-body">
                 <form id="formCreateUnit">
+                    @csrf
                     <div class="form-group">
-                        @csrf
                         <label>Nama Unit</label>
                         <input type="text" class="form-control" name="name" id="name" autofocus>
                     </div>
@@ -55,7 +56,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary" onclick="storeUnit()">Simpan</button>
             </div>
         </div>
     </div>
@@ -63,9 +64,9 @@
 @endsection
 
 @push('footer-script')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.7/dist/sweetalert2.all.min.js"></script>
 <script>
     $(document).ready(function() {
         $.ajaxSetup({
@@ -90,20 +91,37 @@
             ]
         });
     });
-    $("#foo").submit(function(event){
+    $("#formCreateUnit").submit(function(event){
+        Swal.fire(
+            'Good job!',
+            'You clicked the button!',
+            'success'
+        )
+        event.preventDefault();
+    });
+
+    function storeUnit() {
         $.ajax({
             url: "{{ route('units.store') }}",
             dataType: 'json',
             type: 'post',
-            data: $(this).serialize(),
-            success: function( data ){
-                $('#response pre').html( data );
-                window.LaravelDataTables["#units-table"].ajax.reload();
+            data: {
+                _token: "{{ csrf_token() }}",
+                name: $('#modalCreateUnit #name').val()
             },
-            error: function( data ){
-                console.log( errorThrown );
+            success: function( res ){
+                if (res.success) {
+                    console.log(res);
+                    $('#formCreateUnit').trigger("reset");
+                    $('#modalCreateUnit').modal('hide');
+                    Swal.fire('Unit berhasil disimpan!', null, 'success')
+                    window.LaravelDataTables["#units-table"].ajax.reload();
+                } else {
+                    console.log('failed');
+                    $('#modalCreateUnit').find('.modal-body').prepend('<div class="alert alert-danger"><strong>Whoops!</strong> ' + res.errors.name + '.</div>');
+                }
             }
         });
-    });
+    }
 </script>
 @endpush
