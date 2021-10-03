@@ -24,7 +24,14 @@ class UnitController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<div class="dropdown"><button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Edit</a><button id="delete-unit" class="dropdown-item" onclick="destroyUnit(' . $row->id . ')">Delete</button></div></div>';
+                    $actionBtn = '<div class="dropdown">
+                                    <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <button id="detail-unit" class="dropdown-item" onclick="OpenDetailUnit(' . $row->id . ')">Edit</button>
+                                        <button id="delete-unit" class="dropdown-item" onclick="destroyUnit(' . $row->id . ')">Delete</button>
+                                    </div>
+                                </div>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -55,24 +62,34 @@ class UnitController extends Controller
             'name' => 'required'
         ]);
 
+        $id = request()->input('id');
+
         if ($is_valid->fails()) {
             return response()->json([
                 'success' => false,
                 'errors' => $is_valid->errors()
             ]);
         }
-
-        $unit = new Unit();
-        $unit->name = $request->name;
-        $unit->slug = Str::slug($request->name, '-');
-        $unit->ip_address = $request->ip();
-        $unit->created_by = auth()->user()->name;
-        $unit->updated_by = auth()->user()->name;
-        $unit->save();
+        if($id){
+            $data = Unit::where('id', $id)->update([
+                'name' => $request->name,
+                'slug' =>Str::slug($request->name, '-'),
+                'updated_by' => auth()->user()->name,
+                'ip_address' => $request->ip()
+            ]);
+        }else{
+            $data = Unit::create([
+                'name' => $request->name,
+                'slug' =>Str::slug($request->name, '-'),
+                'updated_by' => auth()->user()->name,
+                'ip_address' => $request->ip()
+            ]);
+        }
 
         return response()->json([
             'success' => true,
-            'name' => $unit->name
+            'result' => 'success',
+            'data' => $data
         ]);
     }
 
@@ -82,9 +99,15 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $id = request()->input('id');
+        $data = Unit::findOrfail($id);
+        return response()->json([
+            'success' => true,
+            'result' => 'success',
+            'data' => $data
+        ]);
     }
 
     /**
