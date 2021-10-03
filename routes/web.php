@@ -27,4 +27,5 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::group(['middleware' => ['auth']], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('units', UnitController::class);
+    Route::post('units/detail', [UnitController::class, 'show'])->name('show.units'); // using post
 });
