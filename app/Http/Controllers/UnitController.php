@@ -147,4 +147,10 @@ class UnitController extends Controller
             'success' => true,
         ]);
     }
+
+    public function unit(Unit $unit)
+    {
+        $this->unit = $unit;
+        return view('unit.unit', $this->data);
+    }
 }

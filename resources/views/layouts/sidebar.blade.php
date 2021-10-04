@@ -16,7 +16,7 @@
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
                         @foreach ($unitMenu as $menu)
-                        <a class="nav-link">{{ $menu->name }}</a>
+                        <a class="nav-link" href="{{ route('unit.index', $menu->slug) }}">{{ $menu->name }}</a>
                         @endforeach
                     </nav>
                 </div>
