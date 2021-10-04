@@ -41,10 +41,9 @@
             </div>
             <div class="modal-body">
                 <form id="formCreateUnit">
-                    @csrf
                     <div class="form-group">
                         <label>Nama Unit</label>
-                        <input type="hidden" class="form-control" name="id" id="id" autofocus>
+                        <input type="hidden" class="form-control" name="id" id="id">
                         <input type="text" class="form-control" name="name" id="name" autofocus>
                     </div>
                 </form>
@@ -135,7 +134,6 @@
             confirmButtonText: 'Delete'
         }).then((result) => {
             if (result.isConfirmed) {
-                console.log("/units/" + params)
                 $.ajax({
                     type: "DELETE",
                     url: "/units/" + params,

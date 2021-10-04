@@ -70,17 +70,18 @@ class UnitController extends Controller
                 'errors' => $is_valid->errors()
             ]);
         }
-        if($id){
+        if ($id) {
             $data = Unit::where('id', $id)->update([
                 'name' => $request->name,
-                'slug' =>Str::slug($request->name, '-'),
+                'slug' => Str::slug($request->name, '-'),
                 'updated_by' => auth()->user()->name,
                 'ip_address' => $request->ip()
             ]);
-        }else{
+        } else {
             $data = Unit::create([
                 'name' => $request->name,
-                'slug' =>Str::slug($request->name, '-'),
+                'slug' => Str::slug($request->name, '-'),
+                'created_by' => auth()->user()->name,
                 'updated_by' => auth()->user()->name,
                 'ip_address' => $request->ip()
             ]);
