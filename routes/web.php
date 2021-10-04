@@ -28,4 +28,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('units', UnitController::class)->only(['index', 'store', 'destroy']);
     Route::post('units/detail', [UnitController::class, 'show'])->name('show.units'); // using post
+
+    Route::prefix('unit')->group(function () {
+        Route::get('{unit:slug}', [UnitController::class, 'unit'])->name('unit.index');
+    });
 });
