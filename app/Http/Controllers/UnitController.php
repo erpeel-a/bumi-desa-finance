@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\UnitDataTable;
+use App\Models\Report;
 use App\Models\Unit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
@@ -148,9 +150,39 @@ class UnitController extends Controller
         ]);
     }
 
-    public function unit(Unit $unit)
+    public function unit(Request $request, Unit $unit)
     {
         $this->unit = $unit;
+        if ($request->ajax()) {
+            $data = Report::where('unit_id', $unit->id)->latest()->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->editColumn('date', function ($row) {
+                    return Carbon::parse($row->date)->format('d M Y');
+                })
+                ->editColumn('income', function ($row) {
+                    return "Rp " . number_format($row->income, 2, ',', '.');
+                })
+                ->editColumn('expense', function ($row) {
+                    return "Rp " . number_format($row->expense, 2, ',', '.');
+                })
+                ->editColumn('balance', function ($row) {
+                    return "Rp " . number_format($row->balance, 2, ',', '.');
+                })
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<div class="dropdown">
+                                    <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <button id="detail-unit" class="dropdown-item" onclick="OpenDetailUnit(' . $row->id . ')">Edit</button>
+                                        <button id="delete-unit" class="dropdown-item" onclick="destroyUnit(' . $row->id . ')">Delete</button>
+                                    </div>
+                                </div>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
         return view('unit.unit', $this->data);
     }
 }

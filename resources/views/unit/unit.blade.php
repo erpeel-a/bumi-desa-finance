@@ -5,6 +5,7 @@
     <h1 class="mt-4">{{ $unit->name }}</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Unit</li>
         <li class="breadcrumb-item active">{{ $unit->name }}</li>
     </ol>
     <button type="button" class="btn btn-primary mb-3" id="btn_open_modal">
@@ -13,7 +14,7 @@
     <div class="card mb-4">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-sm table-bordered" id="units-table">
+                <table class="table table-sm table-bordered" id="unit-report-table">
                     <thead>
                         <tr>
                             <th width="7%">No</th>
@@ -33,3 +34,52 @@
     </div>
 </div>
 @endsection
+
+@push('footer-script')
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    });
+
+    var unitReportTable = $('#unit-report-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('unit.index', $unit->slug) }}",
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex'
+            },
+            {
+                data: 'description',
+                name: 'description'
+            },
+            {
+                data: 'date',
+                name: 'date'
+            },
+            {
+                data: 'income',
+                name: 'income'
+            },
+            {
+                data: 'expense',
+                name: 'expense'
+            },
+            {
+                data: 'balance',
+                name: 'balance'
+            },
+            {
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            },
+        ]
+    });
+</script>
+@endpush
