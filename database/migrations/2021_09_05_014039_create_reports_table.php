@@ -18,9 +18,9 @@ class CreateReportsTable extends Migration
             $table->foreignId('unit_id')->constrained('units')->onUpdate('cascade')->onDelete('cascade');
             $table->text('description');
             $table->date('date');
-            $table->integer('income')->nullable();
-            $table->integer('expense')->nullable();
-            $table->integer('balance')->nullable();
+            $table->integer('income')->default(0);
+            $table->integer('expense')->default(0);
+            $table->integer('balance');
             $table->string('ip_address')->nullable();
             $table->string('created_by');
             $table->string('updated_by');

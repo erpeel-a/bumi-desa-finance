@@ -61,7 +61,7 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $is_valid = Validator::make($request->all(), [
-            'name' => 'required'
+            'name' => 'required|unique:units'
         ]);
 
         $id = request()->input('id');
@@ -166,9 +166,6 @@ class UnitController extends Controller
                 ->editColumn('expense', function ($row) {
                     return "Rp " . number_format($row->expense, 2, ',', '.');
                 })
-                ->editColumn('balance', function ($row) {
-                    return "Rp " . number_format($row->balance, 2, ',', '.');
-                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<div class="dropdown">
                                     <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
@@ -184,5 +181,33 @@ class UnitController extends Controller
                 ->make(true);
         }
         return view('unit.unit', $this->data);
+    }
+
+    public function unitCreate(Unit $unit)
+    {
+        $this->unit = $unit;
+        return view('unit.unit-create', $this->data);
+    }
+    
+    public function UnitStore(Request $request, Unit $unit)
+    {
+        $request->validate([
+            'date' => 'required|date|unique:reports',
+            'income' => 'numeric',
+            'expense' => 'numeric'
+        ]);
+        
+        Report::create([
+            'unit_id' => $unit->id,
+            'description' => $request->description,
+            'date' => $request->date,
+            'income' => $request->income,
+            'expense' => $request->expense,
+            'ip_address' => $request->ip(),
+            'created_by' => auth()->user()->name,
+            'updated_by' => auth()->user()->name
+        ]);
+
+        return redirect()->route('unit.index', $unit->slug)->with('success', 'Berhasil input data unit.');
     }
 }
