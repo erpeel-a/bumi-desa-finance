@@ -171,7 +171,7 @@ class UnitController extends Controller
                                     <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <button id="detail-unit" class="dropdown-item" onclick="OpenDetailUnit(' . $row->id . ')">Edit</button>
+                                        <a id="detail-unit" class="dropdown-item" href="' . route('unit.edit', [$row->unit->slug, Crypt::encrypt($row->id)]) . '">Edit</a>
                                         <button id="delete-unit" class="dropdown-item" onclick="destroyUnit(' . $row->id . ')">Delete</button>
                                     </div>
                                 </div>';
@@ -192,7 +192,7 @@ class UnitController extends Controller
     public function UnitStore(Request $request, Unit $unit)
     {
         $request->validate([
-            'date' => 'required|date|unique:reports',
+            'date' => 'required|date',
             'income' => 'numeric',
             'expense' => 'numeric'
         ]);
@@ -209,5 +209,33 @@ class UnitController extends Controller
         ]);
 
         return redirect()->route('unit.index', $unit->slug)->with('success', 'Berhasil input data unit.');
+    }
+
+    public function unitEdit(Unit $unit, $id)
+    {
+        $dec = Crypt::decrypt($id);
+        $this->unit = $unit;
+        $this->unit_report = Report::findOrfail($dec);
+        return view('unit.unit-edit', $this->data);
+    }
+
+    public function unitUpdate(Request $request, Unit $unit, $id)
+    {
+        $request->validate([
+            'income' => 'numeric',
+            'expense' => 'numeric'
+        ]);
+
+        $dec = Crypt::decrypt($id);
+        $unit_report = Report::findOrfail($dec);
+        $unit_report->update([
+            'description' => $request->description,
+            'income' => $request->income,
+            'expense' => $request->expense,
+            'ip_address' => $request->ip(),
+            'updated_by' => auth()->user()->name
+        ]);
+
+        return redirect()->route('unit.index', $unit->slug)->with('success', 'Berhasil update data unit.');
     }
 }
