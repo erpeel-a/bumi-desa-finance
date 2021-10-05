@@ -33,5 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('{unit:slug}', [UnitController::class, 'unit'])->name('unit.index');
         Route::get('{unit:slug}/create', [UnitController::class, 'unitCreate'])->name('unit.create');
         Route::post('{unit:slug}', [UnitController::class, 'unitStore'])->name('unit.store');
+        Route::get('{unit:slug}/{id}', [UnitController::class, 'unitEdit'])->name('unit.edit');
+        Route::put('{unit:slug}/{id}', [UnitController::class, 'unitUpdate'])->name('unit.update');
     });
 });
