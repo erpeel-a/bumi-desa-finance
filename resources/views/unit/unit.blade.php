@@ -8,13 +8,18 @@
         <li class="breadcrumb-item active">Unit</li>
         <li class="breadcrumb-item active">{{ $unit->name }}</li>
     </ol>
-    <button type="button" class="btn btn-primary mb-3" id="btn_open_modal">
+    @if ($message = Session::get('success'))
+    <div class="alert alert-success" role="alert">
+        <strong>{{ $message }}</strong>
+    </div>
+    @endif
+    <a href="{{ route('unit.create', $unit->slug) }}" class="btn btn-primary mb-3">
         Tambah
-    </button>
+    </a>
     <div class="card mb-4">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-sm table-bordered" id="unit-report-table">
+                <table class="table table-sm table-bordered" id="unit-report-table" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th width="7%">No</th>
@@ -22,7 +27,6 @@
                             <th>Tanggal</th>
                             <th>Pemasukan</th>
                             <th>Pengeluaran</th>
-                            <th>Saldo</th>
                             <th width="7%" class="text-center">Opsi</th>
                         </tr>
                     </thead>
@@ -68,10 +72,6 @@
             {
                 data: 'expense',
                 name: 'expense'
-            },
-            {
-                data: 'balance',
-                name: 'balance'
             },
             {
                 data: 'action',

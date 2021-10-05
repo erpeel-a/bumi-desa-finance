@@ -13,7 +13,7 @@
     <div class="card mb-4">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-sm table-bordered" id="units-table">
+                <table class="table table-sm table-bordered" id="units-table" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th width="7%">No</th>

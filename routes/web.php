@@ -29,7 +29,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('units', UnitController::class)->only(['index', 'store', 'destroy']);
     Route::post('units/detail', [UnitController::class, 'show'])->name('show.units'); // using post
 
-    Route::prefix('unit-report')->group(function () {
+    Route::prefix('unit')->group(function () {
         Route::get('{unit:slug}', [UnitController::class, 'unit'])->name('unit.index');
+        Route::get('{unit:slug}/create', [UnitController::class, 'unitCreate'])->name('unit.create');
+        Route::post('{unit:slug}', [UnitController::class, 'unitStore'])->name('unit.store');
     });
 });
