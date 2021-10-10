@@ -154,7 +154,7 @@ class UnitController extends Controller
     {
         $this->unit = $unit;
         if ($request->ajax()) {
-            $data = Report::where('unit_id', $unit->id)->latest()->get();
+            $data = Report::where('unit_id', $unit->id)->orderByDesc('date')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->editColumn('date', function ($row) {
@@ -172,7 +172,7 @@ class UnitController extends Controller
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a id="detail-unit" class="dropdown-item" href="' . route('unit.edit', [$row->unit->slug, Crypt::encrypt($row->id)]) . '">Edit</a>
-                                        <button id="delete-unit" class="dropdown-item" onclick="destroyUnit(' . $row->id . ')">Delete</button>
+                                        <button id="delete-unit" class="dropdown-item" onclick="destroyUnitReport(' . $row->id . ')">Delete</button>
                                     </div>
                                 </div>';
                     return $actionBtn;
@@ -237,5 +237,13 @@ class UnitController extends Controller
         ]);
 
         return redirect()->route('unit.index', $unit->slug)->with('success', 'Berhasil update data unit.');
+    }
+
+    public function unitDestroy(Unit $unit, $id)
+    {
+        Report::destroy($id);
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }
