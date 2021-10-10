@@ -81,5 +81,33 @@
             },
         ]
     });
+
+    function destroyUnitReport(params) {
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Untuk menghapus data unit ini ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Delete'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "DELETE",
+                    url: "/unit/{{ $unit->slug }}/" + params,
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            Swal.fire('Terhapus!', 'Unit berhasil dihapus.', 'success');
+                            unitReportTable.ajax.reload();
+                        }
+                    }
+                });
+            }
+        })
+    }
 </script>
 @endpush

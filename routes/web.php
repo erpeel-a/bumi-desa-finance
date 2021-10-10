@@ -35,5 +35,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('{unit:slug}', [UnitController::class, 'unitStore'])->name('unit.store');
         Route::get('{unit:slug}/{id}', [UnitController::class, 'unitEdit'])->name('unit.edit');
         Route::put('{unit:slug}/{id}', [UnitController::class, 'unitUpdate'])->name('unit.update');
+        Route::delete('{unit:slug}/{id}', [UnitController::class, 'unitDestroy'])->name('unit.update');
     });
 });
